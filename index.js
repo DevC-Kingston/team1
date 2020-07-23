@@ -3,6 +3,7 @@
     Only replies with a echo of what you type
     you need to create environment variables for CHATTOKEN and PAGETOKEN
 */
+
 const request = require("request");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -13,13 +14,17 @@ const server = express().use(bodyParser.json()); //creates an express http serve
 const port = process.env.PORT || 5000;
 const MYAPPTOKEN = process.env.CHATTOKEN1;
 const token = process.env.PAGETOKEN;
+const bytechef_url = "https://scontent.fktp1-1.fna.fbcdn.net/v/t1.0-9/110312313_113476020449746_3592402624772909116_n.png?_nc_cat=109&_nc_sid=09cbfe&_nc_ohc=don-tGMLOxgAX8c3pTR&_nc_ht=scontent.fktp1-1.fna&oh=081c046c3a95a155d8be9c495cc20be1&oe=5F3EE7C5";
+const testRecipe_url = "https://jamaicans.com/wp-content/uploads/yellow-yam-with-callaloo-2~s800x800.jpg"
+let recipeName;
+let dish = [];
+
 server.listen(port, ()=>{ console.log("Webhook is listening on port "+ port)});
 
 /* ROUTES */
 server.get('/',(request, response)=>{
     response.send("This is my webhook example;");
 });
-
 server.post("/webhook",(request, response)=>{
     let body = request.body; // post data from the request
 
@@ -34,7 +39,7 @@ server.post("/webhook",(request, response)=>{
 
             // get the senders Page Scoped ID
             let sender_psid = webhook_event.sender.id;
-            console.log("Sender ID: "+sender_psid);
+            console.log("We got sender ID: "+sender_psid);
 
              // Check if the event is a message or postback and
              // pass the event to the appropriate handler function
@@ -53,51 +58,45 @@ server.post("/webhook",(request, response)=>{
     }
 
 
+
 });
 
 // Handles messages sent to the bot
 function handleMessage(sender_psid, received_message) {
 
+    let messageText = received_message.text;
+    let messageAttachments = received_message.attachments;
+    let quickReply = received_message.quick_reply;
+
     let response;
-  
-    // Check if the message contains text
-    if (received_message.text) {    
-  
-      // Create the payload for a basic text message
-      response = {
-        "text": `Echo: ${received_message.text}`
-      }
-    }else if(received_message.attachments){
-        // Gey the URL of the message attachment
-        let attachment_url = received_message.attachments[0].payload.url;
-        response ={
-            "attachment": {
-                "type": "template",
-                "payload" : {
-                    "template_type":"generic",
-                    "elements":[{
-                        "title": "Is this the right Picture?",
-                        "subtitle": "Tap a button to answer.",
-                        "image_url": attachment_url,
-                        "buttons": [{
-                            "type": "postback",
-                            "title": "Yes!",
-                            "payload": "yes",
-                        },
-                        {
-                            "type": "postback",
-                            "title": "No!",
-                            "payload": "no",
-                        }]
-                    }]
-                }
-            }
+    if (quickReply){
+        let quickReplyPayload = quickReply.payload;
+        console.log("Reply for message %s was payload %s", messageText, quickReplyPayload);
+
+        // TODO: create Func
+        sendQuickReply(sender_psid, quickReplyPayload);
+
+    }
+    // Checks if the response is the greeting
+    else if(messageText){
+        switch(messageText){
+
+            case "Hey":
+                sendGreetMessage(sender_psid);
+                break;
+            case "hi":
+                sendGreetMessage(sender_psid);
+                break;
+            case "hello":
+                sendGreetMessage(sender_psid);
+                break;
+            default:
+                sendFallbackMessage(sender_psid);
+                break;
+            
         }
-    }  
-    
-    // Sends the response message
-    callSendAPI(sender_psid, response);    
-  }
+    }
+}
 
 // Handles postbacks from templates
 function handlePostback(sender_psid, received_postback) {
@@ -107,16 +106,74 @@ function handlePostback(sender_psid, received_postback) {
     let payload = received_postback.payload;
   
     // Set the response based on the postback payload
-    if (payload === 'yes') {
-      response = { "text": "Thanks!" }
-    } else if (payload === 'no') {
-      response = { "text": "Oops, try sending another image." }
-    }
+    console.log("This is the payload "+payload);
+    switch(payload){
+        case "no":
+            response = { "text": "Thank you for choosing byte-Chef, Please enjoy the rest of your day" }
+            break;
+        case 'yes' :
+            response = { "text": "Thank you!\n"+"Please Choose the ingredient you have.",
+            "quick_replies":[
+                {
+                "content_type":"text",
+                "title":"Chicken",
+                "payload":"chicken",
+                },{
+                "content_type":"text",
+                "title":"Fish",
+                "payload":"fish" 
+
+                },{
+                    "content_type":"text",
+                    "title":"Beef",
+                    "payload":"beef" 
+        
+                },{
+                    "content_type":"text",
+                    "title":"Meat Alternate",
+                    "payload":"alternate" 
+        
+                }
+            ]
+            }
+            break;
+            case "next":
+                recipeName = "Calaloo and Dumpling";
+
+                response = {
+                    "attachment": {
+                        "type": "template",
+                        "payload" : {
+                            "template_type":"generic",
+                            "elements":[{
+                                "title": recipeName,
+                                "subtitle": "Tap a button to answer.",
+                                "image_url": testRecipe_url,
+                                "buttons": [{
+                                    "type": "web_url",
+                                    "title": "Teach me",
+                                    "url": "https://jamaicans.com/callaloosaltfish/",
+                                },
+                                {
+                                    "type": "postback",
+                                    "title": "Show more",
+                                    "payload": "next",
+                                }]
+                            }]
+                        }
+                    }
+                }
+                break;
+
+
+        
+        }
+
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
   }
 
-function callSendAPI(sender_psid, response) {
+function callSendAPI(sender_psid, response, ) {
     // Construct the message body
     let request_body = {
       "recipient": {
@@ -131,7 +188,7 @@ function callSendAPI(sender_psid, response) {
         "qs": { "access_token": token },
         "method": "POST",
         "json": request_body
-    }, (err, res, body) => {
+    }, (err, response, body) => {
         if (!err) {
         console.log('message sent!')
         } else {
@@ -153,7 +210,7 @@ server.get('/webhook',(request, response)=>{
     let mode = request.query['hub.mode'];
     let token = request.query['hub.verify_token'];
     let challenge = request.query['hub.challenge'];
-    console.log(typeof(MYAPPTOKEN));
+    console.log();
     // Checks if a token and mode is in the query string of the request
     if(mode && token){
         // Checks the mode and the token sent is correct
@@ -169,3 +226,149 @@ server.get('/webhook',(request, response)=>{
     }
 
 });
+
+
+function sendGreetMessage(sender_psid){
+    let response = {
+        "attachment": {
+            "type": "template",
+            "payload" : {
+                "template_type":"generic",
+                "elements":[{
+                    "title": "Hello and Welcome to Byte Chef",
+                    "subtitle": "Tap a button to answer.",
+                    "image_url": bytechef_url,
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Let's Begin",
+                        "payload": "yes",
+                    },
+                    {
+                        "type": "postback",
+                        "title": "Already a chef",
+                        "payload": "no",
+                    }]
+                }]
+            }
+        }
+        }
+        callSendAPI(sender_psid,response);
+    }
+    function sendFallbackMessage(sender_psid){
+        let response = {
+            "text": "This is not one of the commands. please Try again"
+            
+        }
+        callSendAPI(sender_psid,response);
+    }
+function sendQuickReply(sender_psid, payload){
+    dish.push(payload);
+    console.log(dish);
+    let response;
+    console.log("In sendQuickReply func and payload is "+payload)
+    if (payload === "no"){
+            response={
+                text : "Thank you for using our service. Good bye"
+            }
+        }else if(payload === "alternate"){
+            response = { "text": `What meat alternate do you have?`,
+                    "quick_replies":[
+                        {
+                        "content_type":"text",
+                        "title":"Ackee",
+                        "payload":"ackee",
+                        },{
+                        "content_type":"text",
+                        "title":"PakChoy",
+                        "payload":"pakchoy" 
+        
+                        },{
+                            "content_type":"text",
+                            "title":"Calaloo",
+                            "payload":"calaloo" 
+                
+                        },{
+                            "content_type":"text",
+                            "title":"Already have Takeout",
+                            "payload":"no" 
+                
+                        }
+                    ]
+            }
+        }else if(payload === "chicken" || payload === "fish"|| payload === "beef" || payload === "ackee" || payload === "calaloo" || payload === "pakchoy"){
+        response = { "text": `What are the staples you have in the kitchen?`,
+            "quick_replies":[
+                {
+                "content_type":"text",
+                "title":"Rice",
+                "payload":"rice",
+                },{
+                "content_type":"text",
+                "title":"Flour",
+                "payload":"flour" 
+
+                },{
+                    "content_type":"text",
+                    "title":"Cornmeal",
+                    "payload":"cornmeal" 
+        
+                },{
+                    "content_type":"text",
+                    "title":"Already have Takeout",
+                    "payload":"no" 
+        
+                }
+            ]
+        }
+    }else if(payload === "cornmeal" || payload === "flour"){
+        response = { "text": `Any ground provisions?`,
+            "quick_replies":[
+                {
+                "content_type":"text",
+                "title":"Yam",
+                "payload":"yam",
+                },{
+                "content_type":"text",
+                "title":"Pumpkin",
+                "payload":"pumpkin" 
+
+                },{
+                    "content_type":"text",
+                    "title":"none",
+                    "payload":"none" 
+        
+                }
+            ]
+        } 
+    }else if(payload === "none" || payload === "rice" || payload === "pumpkin" || payload === "yam"){
+        console.log(dish);
+        response = {
+            "attachment": {
+                "type": "template",
+                "payload" : {
+                    "template_type":"generic",
+                    "elements":[{
+                        "title": "Calaloo Soup",
+                        "subtitle": "Tap a button to answer.",
+                        "image_url": "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fimages.media-allrecipes.com%2Fuserphotos%2F344324.jpg&w=915&h=915&c=sc&poi=face&q=85",
+                        "buttons": [{
+                            "type": "web_url",
+                            "title": "Teach me",
+                            "url": "https://www.allrecipes.com/recipe/182784/traci-bs-callaloo-soup/",
+                        },
+                        {
+                            "type": "postback",
+                            "title": "Show more",
+                            "payload": "next",
+                        }]
+                    }]
+                }
+            }
+        }
+    }
+        
+
+        
+            
+        callSendAPI(sender_psid,response);
+    }
