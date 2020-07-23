@@ -3,7 +3,7 @@
 [//]: <> (Please use this Winning Hackathon Application as an example:
 https://devpost.com/software/rewise-ai-powered-revision-bot)
 
-**Team Members**: Sabrina Shim, Kemar Reid, Stephan Thomas, Shemar Jones, Aldaine Clarke
+**Team Members**: Sabrina Shim, Stephan Thomas, Shemar Jones, Aldaine Clarke
 
 ## Inspiration
 We recognized that there are a lot of persons out there who would like to prepare cheap, quick,
@@ -29,6 +29,7 @@ Tech Stack & Documentation:
 1. Challenge 1 - Implementing google api
 1. Challenge 2 - Finding apis for our use case
 1. Challenge 3 - Learning JavaScript and Nodejs
+1. Challenge 4 - Learning the features of the facebook messenger
  
  
 ## Accomplishments that we're proud of
