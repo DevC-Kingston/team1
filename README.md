@@ -44,8 +44,8 @@ Tech Stack & Documentation:
 
 ## What's next for “Byte-Chef”
 Product Roadmap - next features for example
- Feature 1 - Suggest local resturants for users
- Feature 2 - Search recipes by category e.g. Italian 
+ 1. Feature 1 - Suggest local resturants for users
+ 1. Feature 2 - Search recipes by category e.g. Italian 
 
 
 ## Built With - provide the tech stack used 
