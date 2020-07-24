@@ -80,12 +80,6 @@ function handleMessage(sender_psid, received_message) {
     // Checks if the response is the greeting
     else if(messageText === "Hey" || messageText === "hey" || messageText === "hi" || messageText === "Hi" || messageText === "Hello" || messageText === "hello" || messageText === "chef" || messageText === "recipe" || messageText === "help" || messageText === "Help"){
         sendGreetMessage(sender_psid);
-            case "hello":
-                sendGreetMessage(sender_psid);
-                break;
-            default:
-                sendFallbackMessage(sender_psid);
-                break;
             
         }else{
             sendFallbackMessage(sender_psid);
