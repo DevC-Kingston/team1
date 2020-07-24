@@ -15,8 +15,8 @@ It allows users to add all the ingredients in their kitchen and then be presente
 their submission.
 
 ## List your Chatbot’s features and use cases
- 1 - Allows users to enter ingredients
- 2 - Suggests recipes
+* 1 - Allows users to enter ingredients
+* 2 - Suggests recipes
 
 
 ## How we built it
@@ -26,10 +26,10 @@ Tech Stack & Documentation:
 
 
 ## Challenges we ran into
- Challenge 1 - Implementing google api
- Challenge 2 - Finding apis for our use case
- Challenge 3 - Learning JavaScript and Nodejs
- Challenge 4 - Learning the features of the facebook messenger
+* Challenge 1 - Implementing google api
+* Challenge 2 - Finding apis for our use case
+* Challenge 3 - Learning JavaScript and Nodejs
+* Challenge 4 - Learning the features of the facebook messenger
  
  
 ## Accomplishments that we're proud of
