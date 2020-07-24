@@ -78,7 +78,7 @@ function handleMessage(sender_psid, received_message) {
 
     }
     // Checks if the response is the greeting
-    else if(messageText){
+    else if(messageText === "Hey" || messageText === "hey" || messageText === "hi" || messageText === "Hi" || messageText === "Hello" || messageText === "hello" || messageText === "chef" || messageText === "recipe" || messageText === "help" || messageText === "Help"){
         switch(messageText){
 
             case "Hey":
