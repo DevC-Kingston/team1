@@ -15,8 +15,8 @@ It allows users to add all the ingredients in their kitchen and then be presente
 their submission.
 
 ## List your Chatbot’s features and use cases
-1. 1 - Allows users to enter ingredients
-1. 2 - Suggests recipes
+ 1 - Allows users to enter ingredients
+ 2 - Suggests recipes
 
 
 ## How we built it
@@ -26,10 +26,10 @@ Tech Stack & Documentation:
 
 
 ## Challenges we ran into
-1. Challenge 1 - Implementing google api
-1. Challenge 2 - Finding apis for our use case
-1. Challenge 3 - Learning JavaScript and Nodejs
-1. Challenge 4 - Learning the features of the facebook messenger
+ Challenge 1 - Implementing google api
+ Challenge 2 - Finding apis for our use case
+ Challenge 3 - Learning JavaScript and Nodejs
+ Challenge 4 - Learning the features of the facebook messenger
  
  
 ## Accomplishments that we're proud of
@@ -44,14 +44,14 @@ Tech Stack & Documentation:
 
 ## What's next for “Byte-Chef”
 Product Roadmap - next features for example
-1. Feature 1 - Suggest local resturants for users
-1. Feature 2 - Search recipes by category e.g. Italian 
+ Feature 1 - Suggest local resturants for users
+ Feature 2 - Search recipes by category e.g. Italian 
 
 
 ## Built With - provide the tech stack used 
-* example1 Facebook Messenger 
-* example2 Nodejs
-* example3 Heroku
+* Facebook Messenger 
+* Nodejs
+* Heroku
 
 
 ## Try it out
