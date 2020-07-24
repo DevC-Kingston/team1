@@ -79,14 +79,7 @@ function handleMessage(sender_psid, received_message) {
     }
     // Checks if the response is the greeting
     else if(messageText === "Hey" || messageText === "hey" || messageText === "hi" || messageText === "Hi" || messageText === "Hello" || messageText === "hello" || messageText === "chef" || messageText === "recipe" || messageText === "help" || messageText === "Help"){
-        switch(messageText){
-
-            case "Hey":
-                sendGreetMessage(sender_psid);
-                break;
-            case "hi":
-                sendGreetMessage(sender_psid);
-                break;
+        sendGreetMessage(sender_psid);
             case "hello":
                 sendGreetMessage(sender_psid);
                 break;
@@ -94,8 +87,10 @@ function handleMessage(sender_psid, received_message) {
                 sendFallbackMessage(sender_psid);
                 break;
             
+        }else{
+            sendFallbackMessage(sender_psid);
         }
-    }
+
 }
 
 // Handles postbacks from templates
